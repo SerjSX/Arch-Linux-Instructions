@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <link rel="stylesheet" href="css.css">
+    <link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet"> 
+    <meta charset="utf-8">
+    <title>Arch Linux Instructions</title>
+  </head>
+  <body class="color">
+
+<div class="text"><div class="title"><u>Arch Linux (KDE) Instructions by Me for UEFI Systems | 64bit</u></div>
+
+<br>These instructions below are made by me and with the help of an admin from the Manjaro Discord server, and we came up with simple instructions on how to install Arch Linux on <b>UEFI</b> based systems <b>(64bit, I can't guarantee if it will work with 32bit or others!)</b>. Please keep in mind these are just instructions, anything that would happen to your machine while following these is not my responsibility, this has been of course tested on Oracle VM VirtualBox. This would cover the installation of Arch Linux with installing KDE Plasma with the softwares that are necessary (soon i3 with the softwares of my choice and the admin), if you want to install all KDE applications as well I have included it in a notice. Please read these instructions very carefully to prevent any mistakes, and if there are mistakes first <a href="https://www.google.com/" target="_blank">Google</a> it. You can also ask in Arch's IRC channels, click <a href="https://wiki.archlinux.org/index.php/Arch_IRC_channels" target="_blank">here</a> to check them out. Also give the External Links that are at the end of this page to view other places as well!
+<br><br><b>All below are UEFI based, therefore if you’re using Oracle VM VirtualBox, after creating the VM and before running it, enable UEFI from the VM’s settings by going to the settings of the VM, then System, after that click on ‘Enable EFI (Special OSes only)’. If you use another VM, <a href="https://www.google.com/" target="_blank">Google</a> how to do so.</b>
+<br><br>Before continuing, visit <a href="https://archlinux.org/download/" target="_blank">this link</a> to install the ISO from a server, it's usually named like "archlinux-2021.03.01-x86_64.iso". Then prepare an installation medium by checking <a href="https://wiki.archlinux.org/index.php/Installation_guide#Prepare_an_installation_medium" target="_blank">here</a>. After doing that boot the live environment by checking <a href="https://wiki.archlinux.org/index.php/Installation_guide#Boot_the_live_environment target="_blank">here</a>. And then, when you do these above 3 things, and when you're in the live environment, feel free to continue checking the steps:
+    
+<br><br>1. Verify boot mode by:<br>
+<span class="hack"># ls /sys/firmware/efi/efivars</span>
+
+<br><br>2. Connect to internet by following <a href="https://wiki.archlinux.org/index.php/Iwctl" target="_blank">this for wireless</a> and <a href="https://wiki.archlinux.org/index.php/Installation_guide#Connect_to_the_internet target="_blank">this for others</a>, no need if you're doing this in a VM (well, at least in mine it wasn't needed).
+<br><br><b>Notice: in some areas characters are capitilized, if the CAPS LOCK isn't working do this combination: SHIFT+the key word. As in if I want to type the letter W capitalized, I hold SHIFT and then click W.</b>
+
+<br><br>3. Update system clock:
+<br><span class="hack">- timedatectl set-ntp true
+<br>- timedatectl status
+<br>- timedatectl set-timezone Asia/Beirut
+<br>- timedatectl status</span>
+
+<br><br>4. type this (if you want to use fdisk, check <a href="https://wiki.archlinux.org/index.php/Fdisk#Create_a_partition_table_and_partitions" target="_blank">here</a>):
+<br><span class="hack"># cfdisk</span>
+<br>Create 2 partitions:
+<br>- Size: 260MiB
+<br>with the type: EFI system partition
+<br>- Size: rest.
+<br>with the type: Linux x86-64 root
+<br><br> After creating the 2 partitions with their correct sizes and the type, write the 2 partitions buy choosing like the first one then there's "Write" at the bottom of the cfdisk place, just like you did with type and creating the partitions, choose the first partition then click "Write" and then type "yes", do this for the second partition as well. And then when you write both of the partitions, do "Quit" and continue:
+
+<br><br>5. format partitions by typing separately (do cfdisk back to check if sda1 is EFI and if sda2 is the root partition! If it isn't rewrite it accordingly):
+<br><span class="hack"># mkfs.ext4 /dev/sda2 <span class="sans">(for root partition)</span>
+<br># mkfs.fat -F32 /dev/sda1 <span class="sans">(for EFI system partition)</span></span>
+
+<br><br>6. Mount the partitions (do cfdisk back to check if sda1 is EFI and if sda2 is the root partition! If it isn't rewrite it accordingly):
+<br><span class="hack"># mount /dev/sda2 /mnt <span class="sans">(for root partition)</span>
+<br># mkdir /mnt/efi <span class="sans">(for creating /mnt/efi for the EFI system partition)</span>
+<br># mount /dev/sda1 /mnt/efi <span class="sans">(for EFI partition)</span></span>
+
+<br><br>7. Let's install the necessary packages, please take these into consideration before installing it and read these notes:
+<br>- "intel-ucode" may be replaced, I use intel processor possibly that's why I have written that package. Check <a href="https://wiki.archlinux.org/index.php/microcode#Installation" target="_blank">here</a> to install for your requirement, and replace the package name with "intel-ucode", you may not need any (not guaranteed).
+<br>- "linux-zen" can be replaced with another kernel of your choice, this is the most stable for daily usage according to Arch Linux, check <a href="https://wiki.archlinux.org/index.php/Kernel" target="_blank">here</a> to choose the kernel of your choice, and replace it with "linux-zen" package.
+<br>- "efibootmgr" is needed by "grub" for EFI systems.
+<br>- "nano" used for text editing which we will use later on, and "networkmanager" used for connecting to wifi with typing "nmtui", but we have to enable it first then restart the pc, I have said it how later on.
+After choosing the packages that you will replace, IF you will replace, type this and replace the packages accordingly (if you have to replace some, feel free to add more but make sure you know how to use the package!):
+<br><span class="hack"># pacstrap /mnt base base-devel linux-zen linux-firmware nano intel-ucode grub efibootmgr networkmanager</span>
+
+<br><br>8. Now let's configure the system after the packages from step 7 are installed:
+<br><span class="hack"># genfstab -U /mnt >> /mnt/etc/fstab
+<br># arch-chroot /mnt
+<br># ln -sf /usr/share/zoneinfo/Asia/Beirut /etc/localtime
+<br># hwclock --systohc</span> 
+
+<br><br>9. Applying localization, type these separately:
+<br><span class="hack"><span class="sans">- run:</span> # nano /etc/locale.gen
+<br><span class="sans">Then uncomment "en_US.UTF-8 UTF-8" OR the language of your choice</span>
+<br><span class="sans">- save the file and then run:</span> # locale-gen
+<br><span class="sans">- and then run:</span> nano /etc/locale.conf 
+<br><span class="sans">- and type in the file:</span> LANG=en_US.UTF-8 <span class="sans">| replace "en_US.UTF-8" with the language you uncommented before.</span></span>
+
+<br><br>10. Now to setup the hostname file, type: <br><span class="hack"># nano /etc/hostname</span>
+Then type a host name in the file.
+<br>- Then run this: <br><span class="hack"># nano /etc/hosts</span>
+<br>And type these in the file (respect the new lines! If a line is in a separate line, don't type it next to each other):
+<br>127.0.0.1 localhost
+<br>: :1 localhost
+<br>127.0.1.1 myhostname.localdomain myhostname
+
+<br><br>11. Let's setup the root password by typing:
+<br><span class="hack"># passwd</span>
+<br>And insert a password.
+
+<br><br>12. Let's setup the bootloader by running these separately: 
+<br><span class="hack"># grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB
+<br># grub-mkconfig -o /boot/grub/grub.cfg</span>
+
+<br><br>13. exit chroot by typing "exit" and now restart by typing "reboot" OR if you're in a VM type "shutdown now" and go remove the Arch Linux image from the VM settings by going to the settings of your VM, then storage, then the one under "Controller: IDE", under the other tab in "Attributes" next to Optical Drive there's a CD icon, click on that and change from the ISO to your Host Drive.
+
+<br><br>14. Add non-root user:
+<br><span class="hack"># useradd -m user</span> | replace "user" with a user name.
+
+<br><br>15. Set a password for that user:
+<br><span class="hack"># passwd user</span> | replace "user" with the user name you chose above to create a user with.
+
+<br><br>16. Add the user to the required groups:
+<br><span class="hack"># usermod -aG wheel,audio,video,optical,storage user</span> | replace "user" that's after "storage" by the user name you created above.
+
+<br><br>17. Giving super user privileges to all the users in the wheel group (currently the only user we made):
+<br>- Run this:
+<br><span class="hack">EDITOR=nano visudo</span>
+<br>- Uncomment (remove the #) the line that says:
+<br># %wheel ALL=(ALL) ALL
+<br>- Exit root account by typing "exit" and then log in to your user.
+
+<br><br>18. Installing plasma:
+<br>- enable Network Manager by:
+<br><span class="hack">systemctl enable NetworkManager</span>
+<br>Reboot then type "nmtui" and connect to wifi.
+<br>- Update your system:
+<br><span class="hack"># pacman -Syu</span>
+<br>- Install xorg-server, plasma and sddm by typing:
+<br># pacman -S xorg-server plasma sddm gwenview konsole kate dolphin okular spectacle partitionmanager ark packagekit-qt5 appstream
+<br><br><b>Note: there are several applications here ^ that I chose, which are: dolphin (file manager), kate (text editor), konsole (terminal), gnenview (picture viewer), okular (document viewer), spectacle (screenshot taker), paritionmanager (to manage your partitions), ark (archive extractor and other related), packagekit-qt5 and appstream needed for Discover to install applications. You can add/remove any of these, these are just applications nothing related to the system, but make sure you install konsole or a terminal!</b>
+<br><br>- enable sddm by typing:
+<br><span class="hack"> systemctl enable sddm.service</span>
+<br>Test to check sessions by typing:
+<br><span class="hack">loginctl show-session $XDG_SESSION_ID</span>
+<br>- type "reboot" to reboot.
+<br>- Sometimes Discover doesn't work, so reinstall appstream by: 
+<br><span class="hack">sudo pacman -S appstream</span> | if that says no applications found, do it with yay: <span class="hack">yay -S appstream</span>
+
+<br><br><b>Done! This is it for now, soon a method without KDE. Only i3gaps and some applications to get started.</b>  
+
+<br><br><b><span class="link">External links</span></b>:
+<ul>
+<li><a href="https://wiki.archlinux.org/index.php/Arch_IRC_channels" target="_blank">Arch Linux IRC Channels</a></li>
+<li><a href="https://wiki.archlinux.org/index.php/Installation_guide" target="_blank">Arch Linux's Installation Guide</a></li>
+<li><a href="https://bbs.archlinux.org/" target="_blank">Arch Linux's Forums</a></li>
+<li><a href="https://kde.org/" target="_blank">KDE's Website</a></li>
+<li><a href="https://discord.gg/3EcJN5J" target="_blank">Manjaro's Unofficial Discord Server</a></li>
+</ul>
+
+    </div>
+    
+  </body>
+</html>

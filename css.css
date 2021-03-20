@@ -1,0 +1,35 @@
+body.color {
+    background-color: #1d2021;
+}
+
+.text {
+    background-color: #363f42;
+    padding: 5px;
+    margin-right: 10px;
+    margin-left: 5px;
+    border-radius: 10px;
+    color: #c8cbcc;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.title {
+    text-align: center;
+    font-size: 25px;
+    margin-top: 10px;
+}
+
+.link {
+    font-size: 20px;
+}
+
+a {
+    color: #dcdfe0;
+}
+
+.hack {
+    font-family: hack, monospace;
+}
+
+.sans {
+    font-family: 'Open Sans', sans-serif;
+}
