@@ -26,10 +26,13 @@ a {
     color: #dcdfe0;
 }
 
-.hack {
-    font-family: hack, monospace;
-}
-
 .sans {
     font-family: 'Open Sans', sans-serif;
+}
+
+.code {
+    background-color: #1d2021;
+    font-family: hack, monospace;
+    padding: 5px;
+    border-radius: 10px;
 }
