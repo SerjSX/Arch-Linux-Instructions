@@ -2,6 +2,19 @@ body.color {
     background-color: #1d2021;
 }
 
+.tophomepage {
+    padding: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    cursor: pointer;
+    height: auto;
+}
+
+.tophomepage:hover {
+    background-color: #465357;
+    border-radius: 10px;
+}
+
 .text {
     background-color: #363f42;
     padding: 10px;
