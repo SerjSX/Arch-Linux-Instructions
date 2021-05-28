@@ -37,12 +37,12 @@
 
 <br><br>D. type this first (if you want to use fdisk, check <a href="https://wiki.archlinux.org/index.php/Fdisk#Create_a_partition_table_and_partitions" target="_blank">here</a>):
 <br><span class="code"># cfdisk</span>
-<br>1. Create 2 partitions:
-<br>- Size: 260MiB
-<br>with the type: EFI system partition
-<br>- Size: rest.
-<br>with the type: Linux x86-64 root
-<br><br> After creating the 2 partitions with their correct sizes and the type, write the 2 partitions buy choosing like the first one then there's "Write" at the bottom of the cfdisk place, just like you did with type and creating the partitions, choose the first partition then click "Write" and then type "yes", do this for the second partition as well. And then when you write both of the partitions, do "Quit" and continue:
+<br> Delete all of your current partitions until it's 1 partition that has your full storage (by choosing each partition and then do "Delete" that's at the bottom), then create 2 partitions:
+<br>- With size: 260MiB
+<br>And with the type: EFI system partition
+<br>- With Size: rest.
+<br>And with the type: Linux x86-64 root
+<br><br> After creating the 2 partitions with their correct sizes and the type, write the 2 partitions by first choosing the first one then there's "Write" at the bottom of the cfdisk place, just like you did with type and creating the partitions, choose the first partition then click "Write" and then type "yes", do this for the second partition as well. And then when you write both of the partitions, do "Quit" and continue:
 
 <br><br>E. format partitions by typing separately (do cfdisk back to check if sda1 is EFI and if sda2 is the root partition! If it isn't rewrite it accordingly):
 <br><span class="code">- mkfs.ext4 /dev/sda2</span> for root partition
@@ -137,7 +137,6 @@ After choosing the packages that you will replace, IF you will replace, type thi
 <li><a href="https://wiki.archlinux.org/index.php/Installation_guide" target="_blank">Arch Linux's Installation Guide</a></li>
 <li>Go here if you need help: <a href="https://bbs.archlinux.org/" target="_blank">Arch Linux's Forums</a></li>
 <li><a href="https://kde.org/" target="_blank">KDE's Website</a></li>
-<li><a href="https://discord.gg/3EcJN5J" target="_blank">Manjaro's Unofficial Discord Server</a></li>
 </ul>
 
     </div>
