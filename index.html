@@ -123,11 +123,11 @@ After choosing the packages that you will replace, IF you will replace, type thi
 <br>6. Test to check sessions by typing:
 <br><span class="code">- loginctl show-session $XDG_SESSION_ID</span>
 <br>7. type "reboot" to reboot.
-<br>8. Install yay by typing these separately:
+<br>8. [EXTRA] Install yay by typing these separately:
 <br><span class="code">- git clone https://aur.archlinux.org/yay.git</span>
 <br><span class="code">- cd yay</span>
 <br><span class="code">- makepkg -si</span>
-<br>9. Sometimes Discover doesn't work, so reinstall appstream by: 
+<br>9. Reinstall appstream (KDE's Discover may not work at first, this is the solution) by: 
 <br><span class="code">- sudo pacman -S appstream</span> | if that says no applications found, do it with yay: <span class="code">yay -S appstream</span>
 
 <br><br><b>Done!</b>  
