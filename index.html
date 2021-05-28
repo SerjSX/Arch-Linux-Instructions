@@ -32,8 +32,8 @@
 <br><br>C. Update system clock by typing these:
 <br><span class="code">- timedatectl set-ntp true
 <br>- timedatectl status
-<br>- timedatectl set-timezone Asia/Beirut
-<br>- timedatectl status</span>
+<br>- timedatectl set-timezone Asia/Beirut</span> Check here to find out your timezone: <a href="https://wiki.archlinux.org/title/System_time#System_clock" target="_blank">https://wiki.archlinux.org/title/System_time#System_clock</a> the current one is for my country.
+<br><span class="code">- timedatectl status</span>
 
 <br><br>D. type this first (if you want to use fdisk, check <a href="https://wiki.archlinux.org/index.php/Fdisk#Create_a_partition_table_and_partitions" target="_blank">here</a>):
 <br><span class="code"># cfdisk</span>
@@ -64,14 +64,14 @@ After choosing the packages that you will replace, IF you will replace, type thi
 <br><br>H. Now let's configure the system after the packages from step 7 are installed:
 <br><span class="code">- genfstab -U /mnt >> /mnt/etc/fstab</span>
 <br><span class="code">- arch-chroot /mnt</span>
-<br><span class="code">- ln -sf /usr/share/zoneinfo/Asia/Beirut /etc/localtime</span>
+<br><span class="code">- ln -sf /usr/share/zoneinfo/Asia/Beirut /etc/localtime</span> change this according to what you put in C!
 <br><span class="code">- hwclock --systohc</span>
 
 <br><br>I. Applying localization, type these separately:
-<br>1. run: <span class="code"> nano /etc/locale.gen</span>
+<br>1. run: <br><span class="code"> nano /etc/locale.gen</span>
 <br>Then uncomment "en_US.UTF-8 UTF-8" OR the language of your choice
-<br>2. save the file and then run: <span class="code">locale-gen</span>
-<br>3. and then run: <span class="code">nano /etc/locale.conf</span>
+<br>2. save the file and then run: <br><span class="code">locale-gen</span>
+<br>3. and then run: <br><span class="code">nano /etc/locale.conf</span>
 <br>4. and type in the file: LANG=en_US.UTF-8 | replace "en_US.UTF-8" with the language you uncommented before.
 
 <br><br>J. Now to setup the hostname file, 1. type: <br><span class="code"> nano /etc/hostname</span>
