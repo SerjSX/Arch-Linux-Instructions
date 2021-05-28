@@ -32,9 +32,11 @@
 
 <br><br>C. Update system clock by typing these:
 <br><span class="code">- timedatectl set-ntp true
-<br>- timedatectl status
-<br>- timedatectl set-timezone Asia/Beirut</span> Check here to find out your timezone: <a href="https://wiki.archlinux.org/title/System_time#Time_zone" target="_blank">https://wiki.archlinux.org/title/System_time#Time_zone</a> the current one is for my country.
-<br><span class="code">- timedatectl status</span>
+<br>- timedatectl status</span> Now let's list the timezones available to see if yours is here:
+<br><span class="code">- timedatectl list-timezones</span> Then let's set your timezone:
+<br><span class="code">- timedatectl set-timezone <i>Zone/SubZone</i></span> instead of "Zone/SubZone" insert one from the command that we did before, for example:
+<br><span class="code">- timedatectl set-timezone Canada/Eastern</span> Now let's check if it worked:
+<br><span class="code">- timedatectl status</span> if it didn't work please do it again.
 
 <br><br>D. type this first (if you want to use fdisk, check <a href="https://wiki.archlinux.org/index.php/Fdisk#Create_a_partition_table_and_partitions" target="_blank">here</a>):
 <br><span class="code"># cfdisk</span>
@@ -66,12 +68,12 @@ After choosing the packages that you will replace, IF you will replace, type thi
 <br><br>H. Now let's configure the system after the packages from step 7 are installed:
 <br><span class="code">- genfstab -U /mnt >> /mnt/etc/fstab</span>
 <br><span class="code">- arch-chroot /mnt</span>
-<br><span class="code">- ln -sf /usr/share/zoneinfo/Asia/Beirut /etc/localtime</span> change this according to what you put in C!
+<br><span class="code">- ln -sf /usr/share/zoneinfo/<i>Zone/SubZone</i> /etc/localtime</span> change this according to what you put in C!
 <br><span class="code">- hwclock --systohc</span>
 
 <br><br>I. Applying localization, type these separately:
 <br>1. run: <br><span class="code"> nano /etc/locale.gen</span>
-<br>Then uncomment "en_US.UTF-8 UTF-8" OR the language of your choice
+<br>Then uncomment "en_US.UTF-8 UTF-8" OR the language of your choice.
 <br>2. save the file and then run: <br><span class="code">locale-gen</span>
 <br>3. and then run: <br><span class="code">nano /etc/locale.conf</span>
 <br>4. and type in the file: LANG=en_US.UTF-8 | replace "en_US.UTF-8" with the language you uncommented before.
