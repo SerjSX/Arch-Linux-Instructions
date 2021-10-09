@@ -11,10 +11,14 @@
   </head>
   <body class="color">
 
-<div class="text"><div class="title">
+<div class="page">
+<div class="title">
 
-<br><u>Arch Linux (KDE) Instructions by Me for UEFI Systems | 64bit</u></div>
+<br><u>Arch Linux (KDE) Instructions by Me for UEFI Systems | 64bit</u>
 
+</div>
+
+<div class="text">
 <br>These instructions below are made by me and with the help of an admin from the Manjaro Discord server, and we came up with simple instructions on how to install Arch Linux on <b>UEFI</b> based systems. Please keep in mind these are just instructions, anything that would happen to your machine while following these is not my responsibility, this has been of course tested on Oracle VM VirtualBox. This would cover the installation of Arch Linux with installing KDE Plasma with the softwares that are necessary (soon i3 with the softwares of my choice and the admin), if you want to install all KDE applications as well I have included it in a notice. And give the External Links a look that are at the end of this page to view other places as well!
 <br><br><b>All below are UEFI based, therefore if you’re using Oracle VM VirtualBox, after creating the VM and before running it, enable UEFI from the VM’s settings by going to the settings of the VM, then System, after that click on ‘Enable EFI (Special OSes only)’. If you use another VM, <a href="https://www.google.com/" target="_blank">Google</a> how to do so.</b>
 <br><br>Before continuing, visit <a href="https://archlinux.org/download/" target="_blank">this link</a> to install the ISO from a server, it's usually named like "archlinux-2021.03.01-x86_64.iso". Then prepare an installation medium by checking <a href="https://wiki.archlinux.org/index.php/Installation_guide#Prepare_an_installation_medium" target="_blank">here</a>. After doing that boot the live environment by checking <a href="https://wiki.archlinux.org/index.php/Installation_guide#Boot_the_live_environment target="_blank">here</a>. And then, when you do these above 3 things, and when you're in the live environment, feel free to continue checking the steps:
@@ -31,8 +35,8 @@
 <br><br>B. Connect to internet by following <a href="https://wiki.archlinux.org/index.php/Iwctl" target="_blank">this for wireless</a> and <a href="https://wiki.archlinux.org/index.php/Installation_guide#Connect_to_the_internet target="_blank">this for others</a>, no need if you're doing this in a VM (well, at least in mine it wasn't needed).
 
 <br><br>C. Update system clock by typing these:
-<br><span class="code">- timedatectl set-ntp true
-<br>- timedatectl status</span> Now let's list the timezones available to see if yours is here:
+<br><span class="code">- timedatectl set-ntp true</span>
+<br><span class="code">- timedatectl status</span> Now let's list the timezones available to see if yours is here:
 <br><span class="code">- timedatectl list-timezones</span> Then let's set your timezone:
 <br><span class="code">- timedatectl set-timezone <i>Zone/SubZone</i></span> instead of "Zone/SubZone" insert one from the command that we did before, for example:
 <br><span class="code">timedatectl set-timezone Canada/Eastern</span> Now let's check if it worked:
@@ -91,8 +95,8 @@ After choosing the packages that you will replace, IF you will replace, type thi
 <br>And insert a password.
 
 <br><br>L. Let's setup the bootloader by running these separately: 
-<br><span class="code">- grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB
-<br>grub-mkconfig -o /boot/grub/grub.cfg</span>
+<br><span class="code">- grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB</span>
+<br><span class="code">- grub-mkconfig -o /boot/grub/grub.cfg</span>
 
 <br><br>M. exit chroot by typing "exit" and now restart by typing "reboot" OR if you're in a VM type "shutdown now" and go remove the Arch Linux image from the VM settings by going to the settings of your VM, then storage, then the one under "Controller: IDE", under the other tab in "Attributes" next to Optical Drive there's a CD icon, click on that and change from the ISO to your Host Drive.
 
@@ -143,6 +147,7 @@ After choosing the packages that you will replace, IF you will replace, type thi
 <li><a href="https://kde.org/" target="_blank">KDE's Website</a></li>
 </ul>
 
+    </div>
     </div>
     
   </body>

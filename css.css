@@ -15,13 +15,17 @@ body.color {
     border-radius: 10px;
 }
 
-.text {
+.page {
     background-color: #363f42;
-    padding: 10px;
     margin-right: 10px;
     margin-left: 5px;
     border-radius: 10px;
+}
+
+.text {
+    padding: 10px;
     color: #c8cbcc;
+    line-height: 30px;
     font-family: 'Open Sans', sans-serif;
 }
 
@@ -47,5 +51,6 @@ a {
     background-color: #1d2021;
     font-family: hack, monospace;
     padding: 5px;
+    line-height: 40px;
     border-radius: 10px;
 }
