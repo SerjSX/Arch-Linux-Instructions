@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <link rel="stylesheet" href="css.css">
+    <link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet"> 
+    <meta charset="utf-8">
+    <title>Arch Linux Instructions</title>
+  </head>
+  <body class="color">
+
+<div class="page">
+<div class="title">
+
+<br><u>Arch Linux Instructions by Me for UEFI Systems | 64bit | i3</u><br>
+
+<a href="index.html"><button id="kdebutton">Home</button></a>
+  <a href="kde.html"><button id="kdebutton">KDE</button></a>
+  <a href="i3.html"><button id="i3button">i3</button></a>
+</div>
+
+<div class="text" id="text-box">
+    
+<b>Notices: 
+<br>1. if you type commands and it says "you cannot perform this unless you are root" or similar, add "sudo" before the main command which then asks for your password and runs it as root. 
+<br>2. Whatever is after | isn't included in the command, they're for notes about the command! 
+<br>3. Don't type - with the command, they're for separating different commands so you wouldn't be confused.
+<br>4. In some areas characters are capitilized, if the CAPS LOCK isn't working do this combination: SHIFT+the key word. As in if I want to type the letter W capitalized, I hold SHIFT and then click W.</b>
+
+<br><br>A. Verify boot mode by:
+<br><span class="code">- ls /sys/firmware/efi/efivars</span>
+
+<br><br>B. Connect to internet by following <a href="https://wiki.archlinux.org/index.php/Iwctl" target="_blank">this for wireless</a> and <a href="https://wiki.archlinux.org/index.php/Installation_guide#Connect_to_the_internet target="_blank">this for others</a>, no need if you're doing this in a VM (well, at least in mine it wasn't needed).
+
+<br><br>C. Update system clock by typing these:
+<br><span class="code">- timedatectl set-ntp true</span>
+<br><span class="code">- timedatectl status</span> Now let's list the timezones available to see if yours is here:
+<br><span class="code">- timedatectl list-timezones</span> Then let's set your timezone:
+<br><span class="code">- timedatectl set-timezone <i>Zone/SubZone</i></span> instead of "Zone/SubZone" insert one from the command that we did before, for example:
+<br><span class="code">timedatectl set-timezone Canada/Eastern</span> Now let's check if it worked:
+<br><span class="code">- timedatectl status</span> if it didn't work please do it again.
+
+<br><br>D. type this first (if you want to use fdisk, check <a href="https://wiki.archlinux.org/index.php/Fdisk#Create_a_partition_table_and_partitions" target="_blank">here</a>):
+<br><span class="code"># cfdisk</span>
+<br> Delete all of your current partitions until it's 1 partition that has your full storage (by choosing each partition and then do "Delete" that's at the bottom), then create 2 partitions (by most probably choosing "New" that's at the bottom when on an empty non-labeled partition storage without any type):
+<br>- With size: 260MiB
+<br>And with the type: EFI system partition
+<br> Then the first partition should be created as the EFI system partition type, now go back to the second one which has the rest of your storage (not the EFI system, the one that has no type), and create ("New" at the bottom) another one:
+<br>- With Size: rest.
+<br>And with the type: Linux x86-64 root
+<br><br> After creating the 2 partitions with their correct sizes and the type, write the 2 partitions by first choosing the first one then there's "Write" at the bottom of the cfdisk place, just like you did with type and creating the partitions, choose the first partition then click "Write" and then type "yes", do this for the second partition as well. And then when you write both of the partitions, do "Quit" and continue:
+
+<br><br>E. format partitions by typing separately (do cfdisk back to check if sda1 is EFI and if sda2 is the root partition! If it isn't rewrite it accordingly):
+<br><span class="code">- mkfs.ext4 /dev/sda2</span> for root partition
+<br><span class="code">- mkfs.fat -F32 /dev/sda1</span> for EFI system partition
+
+<br><br>F. Mount the partitions by typing (do cfdisk back to check if sda1 is EFI and if sda2 is the root partition! If it isn't rewrite it accordingly):
+<br><span class="code">- mount /dev/sda2 /mnt</span> for root partition
+<br><span class="code">- mkdir /mnt/efi</span> for creating /mnt/efi for the EFI system partition
+<br><span class="code">- mount /dev/sda1 /mnt/efi</span> for EFI partition
+
+<br><br>G. Let's install the necessary packages, please take these into consideration before installing it and read these notes:
+<br>1. "intel-ucode" may be replaced, I use intel processor possibly that's why I have written that package. Check <a href="https://wiki.archlinux.org/index.php/microcode#Installation" target="_blank">here</a> to install for your requirement, and replace the package name with "intel-ucode", you may not need any (not guaranteed).
+<br>2. "linux-zen" can be replaced with another kernel of your choice, this is the most stable for daily usage according to Arch Linux, check <a href="https://wiki.archlinux.org/index.php/Kernel" target="_blank">here</a> to choose the kernel of your choice, and replace it with "linux-zen" package.
+<br>3. "efibootmgr" is needed by "grub" for EFI systems.
+<br>4. "nano" used for text editing which we will use later on, and "networkmanager" used for connecting to wifi with typing "nmtui", but we have to enable it first then restart the pc, I have said it how later on.
+After choosing the packages that you will replace, IF you will replace, type this and replace the packages accordingly (if you have to replace some, feel free to add more but make sure you know how to use the package!):
+<br><span class="code">- pacstrap /mnt base base-devel linux-zen linux-firmware nano intel-ucode grub efibootmgr networkmanager</span>
+
+<br><br>H. Now let's configure the system after the packages from step 7 are installed:
+<br><span class="code">- genfstab -U /mnt >> /mnt/etc/fstab</span>
+<br><span class="code">- arch-chroot /mnt</span>
+<br><span class="code">- ln -sf /usr/share/zoneinfo/<i>Zone/SubZone</i> /etc/localtime</span> change this according to what you put in C!
+<br><span class="code">- hwclock --systohc</span>
+
+<br><br>I. Applying localization, type these separately:
+<br>1. run: <br><span class="code"> nano /etc/locale.gen</span>
+<br>Then uncomment "en_US.UTF-8 UTF-8" OR the language of your choice.
+<br>2. save the file and then run: <br><span class="code">locale-gen</span>
+<br>3. and then run: <br><span class="code">nano /etc/locale.conf</span>
+<br>4. and type in the file: LANG=en_US.UTF-8 | replace "en_US.UTF-8" with the language you uncommented before.
+
+<br><br>J. Now to setup the hostname file, 1. type: <br><span class="code"> nano /etc/hostname</span>
+<br>Then type a host name of your choice in the file.
+<br>2. Then run this: <br><span class="code">nano /etc/hosts</span>
+<br>And type these in the file (respect the new lines! If a line is in a separate line, don't type it next to each other):
+<br>127.0.0.1 localhost
+<br>: :1 localhost
+<br>127.0.1.1 myhostname.localdomain myhostname | replace "myhostname" with the hostname you put in the /etc/hostname file.
+
+<br><br>K. Let's setup the root password by typing:
+<br><span class="code">- passwd</span>
+<br>And insert a password.
+
+<br><br>L. Let's setup the bootloader by running these separately: 
+<br><span class="code">- grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB</span>
+<br><span class="code">- grub-mkconfig -o /boot/grub/grub.cfg</span>
+
+<br><br>M. exit chroot by typing "exit" and now restart by typing "reboot" OR if you're in a VM type "shutdown now" and go remove the Arch Linux image from the VM settings by going to the settings of your VM, then storage, then the one under "Controller: IDE", under the other tab in "Attributes" next to Optical Drive there's a CD icon, click on that and change from the ISO to your Host Drive.
+
+<br><br>N. Add non-root user:
+<br><span class="code">- useradd -m user</span> | replace "user" with a user name.
+
+<br><br>O. Set a password for that user:
+<br><span class="code">- passwd user</span> | replace "user" with the user name you chose above to create a user with.
+
+<br><br>P. Add the user to the required groups:
+<br><span class="code">- usermod -aG wheel,audio,video,optical,storage user</span> | replace "user" that's after "storage" by the user name you created above.
+
+<br><br>Q. Giving super user privileges to all the users in the wheel group (currently the only user we made):
+<br>1. Run this:
+<br><span class="code">- EDITOR=nano visudo</span>
+<br>2. Uncomment (remove the #) the line that says:
+<br># %wheel ALL=(ALL) ALL
+<br>3. Exit root account by typing "exit" and then log in to your user.
+
+<br><br>R. Installing i3 and the essential packages:
+<br>1. enable Network Manager by:
+<br><span class="code">- systemctl enable NetworkManager</span>
+<br>2. Reboot then type "nmtui" and connect to wifi.
+<br>3. Update your system:
+<br><span class="code">- sudo pacman -Syu</span>
+<br>4. Install xorg-server, lightdm, i3-gaps and tint2 by typing:
+<br><span class="code">- sudo pacman -S xorg-server lightdm lightdm-gtk-greeter i3-gaps tint2</span>
+<br><br><b>Info: lightdm is the login page (with lightdm-gtk-greeter), i3-gaps for display and tint2 bottom bar.</b>
+<br><br>5. enable lightdm by typing:
+<br><span class="code">- systemctl enable lightdm</span>
+<br><br>6. Setting up lightdm greeter:
+<br><span class="code">- sudo nano /etc/lightdm/lightdm.conf</span>
+<br>Change the [Seat:*] section:
+<br>...
+<br>greeter-session=lightdm-yourgreeter-greeter
+<br>...
+<br>instead of "yourgreeter" replace it with the one you installed, for example in this case it's "gtk".
+<br><br>7. type "reboot" to reboot.
+<br><br>8. After rebooting login to i3 (not the one with "(with debug log)", click the arrow and change to "i3") and follow the steps to create config file
+<br><br>9. Go to TTY by doing the combination (usually ALT+SHIFT+F2) and run this:
+<br><span class="code">- cp /etc/i3/config ~/.config/i3/</span>
+<br><br>10. Setting up tint2:
+<br>Add this in the i3 config file (sudo nano $HOME/.config/i3/config):
+<br><span class="code">exec --no-startup-id tint2</span>
+<br><br>11. Then install rofi and xfce4-terminal (rofi is an application launcher and xfce4-terminal is a lightweight terminal emulator):
+<br><span class="code">sudo pacman -S rofi xfce4-terminal</span>
+<br>Exit TTY by doing the combination (usually ALT+SHIFT+F1), if you're facing issues just reboot pc.
+<br>ALT+Enter is the combination to open terminal (konsole)
+<br><br>12. Type this in the terminal to finish setting up rofi:
+<br><span class="code">sudo nano ~/.config/i3/config</span>
+<br>go to the "start dmenu (a program launcher)" section, comment the second line, it should be like this:
+<br><span class="code"># bindsym Mod1+d exec --no-startup-id dmenu_run</span>
+<br>the # is commenting the line. And uncomment the third line, which is:
+<br><span class="code">bindsym Mod1+d exec "rofi -modi drun,run -show drun"</span>
+<br>the # should be gone
+<br>Then save by CTRL+S and close by CTRL+X and reboot your system.
+<br>After rebooting, when doing the combination ALT+D it opens the application menu.
+<br><br>13. Configure i3 further for tint2:
+<br>Remove the following from the i3 configuration file:
+<br><span class="code"># Start i3bar to display a workspace bar (plus the system information i3 status
+<br># finds out, if available)
+<br>bar {
+<br>    status_command i3status
+<br>}</span>
+<br>This will be at the bottom of the config file ^ it removes i3bar so only i3 would start.
+<br>Then reboot your system by typing "reboot" in the terminal.
+<br><br>14. Install yay/<a href="https://wiki.archlinux.org/title/AUR_helpers" target="_blank">https://wiki.archlinux.org/title/AUR_helpers</a> and git by running these in the terminal separately by order:
+<br><span class="code">sudo pacman -S git</span>
+<br><span class="code">git clone https://aur.archlinux.org/yay.git</span>
+<br><span class="code">cd yay</span>
+<br><span class="code">makepkg -si</span>
+<br><br>15. Install Nitrogen and file manager: (nitrogen is a wallpaper tool, for adding/removing wallpapers. Thunar is a lightweight file manager.)
+<br><span class="code">sudo pacman -S nitrogen thunar</span>
+<br>Check here for more information about Nitrogen and how to use it: https://wiki.archlinux.org/title/nitrogen#Usage
+<br>And add this to i3 config:
+<br><span class="code">exec nitrogen --restore &</span>
+<br><br>16. Install xdg-user-dirs
+<br><span class="code">sudo pacman -S xdg-user-dirs</span>
+<br>run this in terminal: xdg-user-dirs-update
+<br>Install autotiling https://aur.archlinux.org/packages/autotiling
+<br><span class="code">yay -S autotiling</span>
+<br>Add "exec_always --no-startup-id autotiling" to the ~/.config/i3/config file.
+<br>Restart pc (reboot)
+<br><br>17. Install PulseAudio:
+<br><span class="code">sudo pacman -S pulseaudio pulseaudio-alsa pavucontrol</span>
+
+<br><br><br><b>Optional additions/notes:</b>
+<br><br>- To check for rofi themes type this in terminal:
+<br><span class="code">rofi-theme-selector</span>
+
+<br><br>- For volume control install:
+<br><span class="code">yay -S pnmixer</span>
+<br>Add this in i3 config at the bottom:
+<br><span class="code">exec_always pnmixer</span>
+
+<br><br>- Nitrogen full screen filling:
+<br><span class="code">nitrogen --set-zoom-fill /path/to/image.png</span>
+
+<br><br><b>Done!</b>  
+
+<br><br><b><span class="link">External links</span></b>:
+<ul>
+<li>Go here if you need help: <a href="https://wiki.archlinux.org/index.php/Arch_IRC_channels" target="_blank">Arch Linux IRC Channels</a></li>
+<li><a href="https://wiki.archlinux.org/index.php/Installation_guide" target="_blank">Arch Linux's Installation Guide</a></li>
+<li>Go here if you need help: <a href="https://bbs.archlinux.org/" target="_blank">Arch Linux's Forums</a></li>
+<li><a href="https://kde.org/" target="_blank">KDE's Website</a></li>
+</ul>
+
+    </div>
+    </div>
+    
+  </body>
+</html>
