@@ -63,11 +63,11 @@
 
 <br><br>G. Let's install the necessary packages, please take these into consideration before installing it and read these notes:
 <br>1. "intel-ucode" may be replaced, I use intel processor possibly that's why I have written that package. Check <a href="https://wiki.archlinux.org/index.php/microcode#Installation" target="_blank">here</a> to install for your requirement, and replace the package name with "intel-ucode", you may not need any (not guaranteed).
-<br>2. "linux-zen" can be replaced with another kernel of your choice, this is the most stable for daily usage according to Arch Linux, check <a href="https://wiki.archlinux.org/index.php/Kernel" target="_blank">here</a> to choose the kernel of your choice, and replace it with "linux-zen" package.
+<br>2. "linux" can be replaced with another kernel of your choice, this is the most stable for daily usage according to Arch Linux, check <a href="https://wiki.archlinux.org/index.php/Kernel" target="_blank">here</a> to choose the kernel of your choice, and replace it with "linux" package.
 <br>3. "efibootmgr" is needed by "grub" for EFI systems.
 <br>4. "nano" used for text editing which we will use later on, and "networkmanager" used for connecting to wifi with typing "nmtui", but we have to enable it first then restart the pc, I have said it how later on.
 After choosing the packages that you will replace, IF you will replace, type this and replace the packages accordingly (if you have to replace some, feel free to add more but make sure you know how to use the package!):
-<br><span class="code">- pacstrap /mnt base base-devel linux-zen linux-firmware nano intel-ucode grub efibootmgr networkmanager</span>
+<br><span class="code">- pacstrap /mnt base base-devel linux linux-firmware nano intel-ucode grub efibootmgr networkmanager</span>
 
 <br><br>H. Now let's configure the system after the packages from step 7 are installed:
 <br><span class="code">- genfstab -U /mnt >> /mnt/etc/fstab</span>
