@@ -18,9 +18,9 @@ body.color {
 
 button {
     margin-top: 30px;
-    padding: 10px;
-    border-radius: 15px;
-    margin-left: 5px;
+    padding: 15px;
+    border-radius: 10px;
+    margin-left: 10px;
     margin-right: 5px;
     border: none;
     cursor: pointer;
@@ -36,7 +36,7 @@ button:hover {
 
 .page {
     background-color: #363f42;
-    margin-right: 10px;
+    margin-right: 5px;
     margin-left: 5px;
     border-radius: 10px;
 }
@@ -51,8 +51,9 @@ button:hover {
 
 .title {
     text-align: center;
-    font-size: 25px;
+    font-size: 22px;
     margin-top: 10px;
+    padding: 10px;
 }
 
 .link {
